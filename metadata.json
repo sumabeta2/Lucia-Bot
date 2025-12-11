@@ -1,0 +1,7 @@
+{
+  "name": "Bot Lucia",
+  "description": "A virtual assistant application for Ramón Delgado, handling inquiries about workshops, books, and payment confirmations.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
