@@ -16,7 +16,7 @@ const client = new Client({
 
 const userFlows = {};
 
-const MI_NUMERO = '51931479063@c.us'; // ← TU número con @c.us
+const MI_NUMERO = '51999123456@c.us'; // ← TU número con @c.us
 const CODIGO_DEMO = '561393'; // ← Cambia cuando quieras
 
 client.on('qr', qr => {
@@ -41,13 +41,12 @@ client.on('message', async msg => {
         return msg.reply('✅ MODO DEMO ACTIVADO\n\nEscribe *cita* para probar el flujo de citas médicas.');
     }
 
-    // ==================== FLUJO TALLER (EXACTAMENTE COMO ME LO DIJISTE) ====================
+    // ==================== FLUJO TALLER (PARA WHATSAPP REAL) ====================
     if (!userFlows[from]) {
         userFlows[from] = { step: null };
     }
     const flow = userFlows[from];
 
-    // Inicio del flujo (cuando presiona TALLER o escribe "taller")
     if (textoLower === 'taller' || textoLower === 'taller primeros auxilios') {
         flow.step = 'pais';
         await msg.reply('Muy bien de acuerdo, para continuar, por favor indícame ¿en qué país te encuentras?\n\nResponde con uno de estos:\n• Perú\n• México\n• Colombia\n• Venezuela\n• Otros');
@@ -116,7 +115,7 @@ client.on('message', async msg => {
     msg.reply('¡Hola! Soy Lucía. Los flujos están en construcción. Pronto estarán listos.');
 });
 
-// ==================== PÁGINA PRINCIPAL CON BOTÓN TALLER (INTACTA) ====================
+// ==================== PÁGINA PRINCIPAL (BOTÓN TALLER = PRÓXIMAMENTE + BOTÓN SECRETO PRUEBA) ====================
 app.get('/', (req, res) => {
   res.send(`
 <!DOCTYPE html>
@@ -131,6 +130,7 @@ app.get('/', (req, res) => {
     h3 {color:#00334e;}
     .btn {display:block;width:85%;max-width:400px;margin:18px auto;padding:20px;background:#00897b;color:white;border-radius:12px;font-size:20px;font-weight:bold;}
     .demo {background:#00bfa5;}
+    .prueba {background:#ff5722;} /* Naranja para que lo veas solo tú */
     #demo-box {display:none;margin:30px auto;width:85%;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 15px #0003;}
     input {width:100%;padding:15px;font-size:18px;border:1px solid #ccc;border-radius:8px;margin:10px 0;}
   </style>
@@ -139,11 +139,12 @@ app.get('/', (req, res) => {
   <h1>Hola, soy Lucía</h1>
   <h3>Asistente virtual de Ramón Delgado</h3>
   <h3>¿Qué te interesa?</h3>
-  <button class="btn" onclick="window.open('https://wa.me/51999123456?text=taller', '_blank')">Taller Primeros Auxilios</button>
+  <button class="btn" onclick="alert('Próximamente')">Taller Primeros Auxilios</button>
   <button class="btn" onclick="alert('Próximamente')">Libros</button>
   <button class="btn" onclick="alert('Próximamente')">Ya hice el pago</button>
   <button class="btn" onclick="alert('Próximamente')">Hablar con Ramón Delgado</button>
   <button onclick="document.getElementById('demo-box').style.display='block'" class="btn demo">DEMO</button>
+  <button onclick="window.location.href='/prueba-taller'" class="btn prueba">PRUEBA TALLER (solo tú)</button>
   <div id="demo-box">
     <p><strong>INTRODUZCA EL CÓDIGO DE SEIS DÍGITOS</strong></p>
     <input type="text" id="codigo" placeholder="Ej: 123456" maxlength="6">
@@ -168,90 +169,87 @@ app.get('/', (req, res) => {
   `);
 });
 
-// ==================== NUEVA RUTA /PRUEBA PARA SIMULAR EL FLUJO (SIMPLE CHAT) ====================
-app.get('/prueba', (req, res) => {
-    // Simular el inicio del flujo (como si hubieras dicho "taller")
-    const messages = [
-        '<div style="background:#e1f5fe;padding:10px;margin:10px;border-radius:8px;text-align:left;max-width:80%;margin-left:auto;"><strong>Bot:</strong> Muy bien de acuerdo, para continuar, por favor indícame ¿en qué país te encuentras?<br>Responde con uno de estos:<br>• Perú<br>• México<br>• Colombia<br>• Venezuela<br>• Otros</div>'
-    ];
-
-    res.send(`
+// ==================== RUTA SECRETA /prueba-taller CON BOTONES REALES ====================
+app.get('/prueba-taller', (req, res) => {
+  res.send(`
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prueba Flujo Taller - Lucía</title>
+  <title>Prueba Taller - Solo para Ramón</title>
   <style>
-    body {font-family:Arial;background:linear-gradient(#a0d8ef,#e0f6ff);margin:0;padding:20px;text-align:center;}
-    #chat {height:400px;overflow-y:scroll;border:1px solid #ccc;padding:10px;background:white;margin:20px auto;width:90%;border-radius:12px;}
-    input {width:70%;padding:10px;font-size:16px;border:1px solid #ccc;border-radius:8px;}
-    button {padding:10px 20px;font-size:16px;background:#00897b;color:white;border:none;border-radius:8px;cursor:pointer;}
-    .user-msg {background:#c8e6c9;padding:8px;margin:5px;border-radius:8px;text-align:right;max-width:80%;margin-right:auto;display:inline-block;}
-    .bot-msg {background:#e1f5fe;padding:8px;margin:5px;border-radius:8px;text-align:left;max-width:80%;margin-left:auto;display:inline-block;}
+    body {font-family:Arial;background:#f5f5f5;padding:20px;text-align:center;}
+    .message {background:white;padding:15px;margin:20px auto;max-width:600px;border-radius:12px;box-shadow:0 2px 10px #0002;}
+    .buttons {display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;}
+    button {padding:15px;font-size:18px;background:#00897b;color:white;border:none;border-radius:8px;cursor:pointer;}
+    .single {grid-column:span 2;}
+    .bold {font-weight:bold;}
   </style>
 </head>
 <body>
-  <h2>Prueba del Flujo Taller (escribe como usuario)</h2>
-  <div id="chat">${messages.join('')}</div>
-  <input type="text" id="input" placeholder="Escribe tu respuesta (ej: México)" onkeypress="if(event.key==='Enter') sendMessage()">
-  <button onclick="sendMessage()">Enviar</button>
+  <h2>Prueba del Flujo Taller (solo tú)</h2>
+  <div id="flow">
+    <div class="message">
+      Muy bien de acuerdo, para continuar, por favor indícame ¿en qué país te encuentras?
+      <div class="buttons">
+        <button onclick="select('Perú')">Perú</button>
+        <button onclick="select('México')">México</button>
+        <button onclick="select('Colombia')">Colombia</button>
+        <button onclick="select('Venezuela')">Venezuela</button>
+        <button onclick="select('Otros')" class="single">Otros</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    let flowStep = 'pais'; // Simula el estado del flujo
-    let flowData = {};
-    
-    function sendMessage() {
-      const input = document.getElementById('input');
-      const userText = input.value.trim().toLowerCase();
-      if (!userText) return;
-      
-      // Agregar mensaje del usuario
-      const chat = document.getElementById('chat');
-      chat.innerHTML += '<div class="user-msg"><strong>Tú:</strong> ' + input.value + '</div>';
-      input.value = '';
-      
-      // Simular respuesta del bot basada en el flujo EXACTO
-      let botReply = '';
-      if (flowStep === 'pais') {
-        if (userText.includes('méxico') || userText.includes('mexico')) {
-          flowStep = 'interes';
-          botReply = 'Muy bien le explicó, el taller será en vivo, a través de la plataforma Google Meet, al inscribirse, tendrá, los siguientes beneficios:<br>Certificado de participación (constancia) con validez internacional, tendrá material de apoyo en PDF y acceso a la clase grabada de por vida.<br><br>Todos estos beneficios, por una inversión de $249 pesos mexicanos.<br><br>Tan solo dígame, ¿Le interesa?<br><br>Responde *SÍ* o *NO*';
-        } else {
-          botReply = 'Gracias por su interés, estamos a su orden si cambia de opinión.';
-          flowStep = null;
-        }
-      } else if (flowStep === 'interes') {
-        if (userText.includes('sí') || userText.includes('si')) {
-          flowStep = 'metodo_pago';
-          botReply = 'Muy bien en México tenemos dos métodos de pago, ¿cuál prefiere?<br><br>Responde con:<br>• OXXO<br>• TRANSFERENCIA';
-        } else if (userText.includes('no')) {
-          botReply = 'Gracias por su interés, estamos a su orden si cambia de opinión.';
-          flowStep = null;
-        } else {
-          botReply = 'Por favor responde *SÍ* o *NO* para continuar.';
-        }
-      } else if (flowStep === 'metodo_pago') {
-        if (userText.includes('oxxo')) {
-          botReply = '*OXXO, por favor:*<br>4741742975530315<br>Luis Ibarra <br>Banregio<br>Monto: $249 pesos mexicanos<br><br>**Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.**<br>**Nota2: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.**';
-          flowStep = null;
-        } else if (userText.includes('transferencia')) {
-          botReply = '*Solo Transferencia bancaria*:<br>721180100038218691<br>Jhonatan Hernández <br>Banco albo<br>Monto: $249 pesos mexicanos<br><br>**Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.**<br>**Nota2: En la transacción, debe verse la clave de rastreo (OBLIGATORIO)**<br>**Nota3: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.**';
-          flowStep = null;
-        }
-      } else {
-        botReply = '¡Hola! Soy Lucía. Los flujos están en construcción. Pronto estarán listos.';
+    function select(option) {
+      document.getElementById('flow').innerHTML = '';
+      if (option !== 'México') {
+        document.getElementById('flow').innerHTML = '<div class="message">Gracias por su interés, estamos a su orden si cambia de opinión.</div>';
+        return;
       }
-      
-      // Agregar respuesta del bot
-      setTimeout(() => {
-        chat.innerHTML += '<div class="bot-msg"><strong>Bot:</strong> ' + botReply + '</div>';
-        chat.scrollTop = chat.scrollHeight;
-      }, 500); // Simula delay de respuesta
+
+      // Paso México
+      let html = '<div class="message">Muy bien le explicó, el taller será en vivo, a través de la plataforma Google Meet, al inscribirse, tendrá, los siguientes beneficios:<br><br>';
+      html += 'Certificado de participación (constancia) con validez internacional, tendrá material de apoyo en PDF y acceso a la clase grabada de por vida.<br><br>';
+      html += 'Todos estos beneficios, por una inversión de $249 pesos mexicanos.<br><br>';
+      html += 'Tan solo dígame, ¿Le interesa?<br>';
+      html += '<div class="buttons"><button onclick="interes(\'sí\')">SÍ</button><button onclick="interes(\'no\')">NO</button></div></div>';
+      document.getElementById('flow').innerHTML = html;
+    }
+
+    function interes(resp) {
+      document.getElementById('flow').innerHTML = '';
+      if (resp === 'no') {
+        document.getElementById('flow').innerHTML = '<div class="message">Gracias por su interés, estamos a su orden si cambia de opinión.</div>';
+        return;
+      }
+
+      let html = '<div class="message">Muy bien en México tenemos dos métodos de pago, ¿cuál prefiere?<br>';
+      html += '<div class="buttons"><button onclick="pago(\'OXXO\')">OXXO</button><button onclick="pago(\'TRANSFERENCIA\')">TRANSFERENCIA</button></div></div>';
+      document.getElementById('flow').innerHTML = html;
+    }
+
+    function pago(metodo) {
+      document.getElementById('flow').innerHTML = '';
+      if (metodo === 'OXXO') {
+        let html = '<div class="message"><span class="bold">OXXO, por favor:</span><br>4741742975530315<br>Luis Ibarra <br>Banregio<br>Monto: $249 pesos mexicanos<br><br>';
+        html += '<span class="bold">Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.</span><br>';
+        html += '<span class="bold">Nota2: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.</span></div>';
+        document.getElementById('flow').innerHTML = html;
+      } else {
+        let html = '<div class="message"><span class="bold">Solo Transferencia bancaria:</span><br>721180100038218691<br>Jhonatan Hernández <br>Banco albo<br>Monto: $249 pesos mexicanos<br><br>';
+        html += '<span class="bold">Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.</span><br>';
+        html += '<span class="bold">Nota2: En la transacción, debe verse la clave de rastreo (OBLIGATORIO)</span><br>';
+        html += '<span class="bold">Nota3: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.</span></div>';
+        document.getElementById('flow').innerHTML = html;
+      }
     }
   </script>
 </body>
 </html>
-    `);
+  `);
 });
 
 client.initialize();
