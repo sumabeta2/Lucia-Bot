@@ -16,7 +16,7 @@ const client = new Client({
 
 const userFlows = {};
 
-const MI_NUMERO = '51999123456@c.us'; // ← TU número con @c.us
+const MI_NUMERO = '51931479063@c.us'; // ← TU número con @c.us
 const CODIGO_DEMO = '561393'; // ← Cambia cuando quieras
 
 client.on('qr', qr => {
