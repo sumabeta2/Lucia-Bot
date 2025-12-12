@@ -1,6 +1,7 @@
 {
   "name": "lucia-bot",
   "version": "1.0.0",
+  "description": "Bot de primeros auxilios y citas médicas",
   "main": "index.js",
   "license": "MIT",
   "type": "commonjs",
