@@ -47,7 +47,7 @@ client.on('message', async msg => {
     }
     const flow = userFlows[from];
 
-    // Inicio del flujo (cuando presiona TALLER)
+    // Inicio del flujo (cuando presiona TALLER o escribe "taller")
     if (textoLower === 'taller' || textoLower === 'taller primeros auxilios') {
         flow.step = 'pais';
         await msg.reply('Muy bien de acuerdo, para continuar, por favor indícame ¿en qué país te encuentras?\n\nResponde con uno de estos:\n• Perú\n• México\n• Colombia\n• Venezuela\n• Otros');
@@ -116,7 +116,7 @@ client.on('message', async msg => {
     msg.reply('¡Hola! Soy Lucía. Los flujos están en construcción. Pronto estarán listos.');
 });
 
-// ==================== PÁGINA SIN NÚMERO Y CON DEMO ====================
+// ==================== PÁGINA CON BOTÓN TALLER CORREGIDO ====================
 app.get('/', (req, res) => {
   res.send(`
 <!DOCTYPE html>
@@ -139,7 +139,7 @@ app.get('/', (req, res) => {
   <h1>Hola, soy Lucía</h1>
   <h3>Asistente virtual de Ramón Delgado</h3>
   <h3>¿Qué te interesa?</h3>
-  <button class="btn" onclick="alert('Próximamente')">Taller Primeros Auxilios</button>
+  <button class="btn" onclick="window.open('https://wa.me/51999123456?text=taller', '_blank')">Taller Primeros Auxilios</button>
   <button class="btn" onclick="alert('Próximamente')">Libros</button>
   <button class="btn" onclick="alert('Próximamente')">Ya hice el pago</button>
   <button class="btn" onclick="alert('Próximamente')">Hablar con Ramón Delgado</button>
