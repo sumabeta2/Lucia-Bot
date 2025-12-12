@@ -1,27 +1,3 @@
-require('dotenv').config();
-const express = require('express');
-const { Client, LocalAuth } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
-
-const app = express();
-app.use(express.json());
-
-const client = new Client({
-  authStrategy: new LocalAuth(),
-  puppeteer: { headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] }
-});
-
-// ==================== ESTADO ====================
-client.on('qr', qr => {
-  console.log('Escanea el QR:');
- qrcode.generate(qr, { small: true });
-});
-
-client.on('ready', () => {
-  console.log('¡Lucía Bot listo!');
-});
-
-// ==================== MODO DEMO SECRETO ====================
 const MI_NUMERO = '51999123456@c.us';   // ← TU número con @c.us
 const CODIGO_DEMO = '561393';           // ← Cambia cuando quieras
 
