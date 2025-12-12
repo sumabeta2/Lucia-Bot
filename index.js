@@ -5,7 +5,6 @@ const qrcode = require('qrcode-terminal');
 
 const app = express();
 app.use(express.json());
-app.use(express.static('public')); // por si tienes imágenes o html
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -22,54 +21,57 @@ client.on('ready', () => {
   console.log('¡Lucía Bot conectado y listo!');
 });
 
-client.on('authenticated', () => {
-  console.log('Autenticado correctamente');
-});
-
-client.on('auth_failure', msg => {
-  console.error('Error de autenticación:', msg);
-});
-
-// ==================== BOTONES SECRETO DEMO ====================
-const MI_NUMERO = '51999123456@c.us';     // ← TU NÚMERO CON @c.us
-const CODIGO_DEMO = '561393';             // ← CAMBIA ESTO SI QUIERES
+// ==================== BOTÓN DEMO SECRETO ====================
+const MI_NUMERO = '51999123456@c.us';   // ← TU NÚMERO CON @c.us
+const CODIGO_DEMO = '561393';           // ← cambia si quieres otro código
 
 client.on('message', async msg => {
   const from = msg.from;
-  const texto = msg.body.trim().toLowerCase();
+  const texto = msg.body.trim();
 
-  // MODO DEMO (solo tú puedes activarlo)
-  if (texto === 'demo' && from === MI_NUMERO) {
-    return msg.reply('Ingresa el código de acceso de 6 dígitos:');
+  if (texto.toLowerCase() === 'demo' && from === MI_NUMERO) {
+    return msg.reply('Ingresa el código de acceso:');
   }
   if (texto === CODIGO_DEMO && from === MI_NUMERO) {
-    return msg.reply('✅ *MODO DEMO ACTIVADO*\n\nEscribe *cita* para probar el flujo de citas médicas.');
+    return msg.reply('✅ *MODO DEMO ACTIVADO*\n\nAhora puedes probar el flujo de citas médicas.\nEscribe *cita* para empezar la demo.');
   }
 
-  // Aquí irán tus flujos normales más adelante
-  if (texto === 'hola') {
-    msg.reply('¡Hola! Soy Lucía, tu asistente de primeros auxilios.\nPronto tendrás los botones de Libros, Taller y Pago.');
-  }
+  // Tus respuestas normales (puedes ir ampliándolas después)
+  if (texto.toLowerCase() === 'hola' || texto === '') && msg.reply('¡Hola! Soy Lucía, asistente virtual de Ramón Delgado.');
 });
 
-// ==================== PÁGINA CON BOTONES EN EL ENLACE ====================
+// ==================== PÁGINA EXACTAMENTE COMO TÚ QUIERES ====================
 app.get('/', (req, res) => {
+  const phone = process.env.PHONE_NUMBER || '51999123456';
   res.send(`
-    <html>
-      <head><title>Lucía Bot</title><meta charset="utf-8"></head>
-      <body style="font-family:Arial;text-align:center;padding:50px;background:#f0f8ff;">
-        <h1>Lucía Bot</h1>
-        <h3>Envíame un mensaje al número del bot:</h3>
-        <a href="https://wa.me/${process.env.PHONE_NUMBER || '51999123456'}" style="font-size:40px;">Abrir WhatsApp</a>
-        <hr>
-        <p><strong>Prueba rápida (escribe en WhatsApp):</strong></p>
-        <button style="font-size:20px;padding:15px;margin:10px;" onclick="alert('Escribe LIBROS')">LIBROS</button>
-        <button style="font-size:20px;padding:15px;margin:10px;" onclick="alert('Escribe TALLER')">TALLER</button>
-        <button style="font-size:20px;padding:15px;margin:10px;" onclick="alert('Escribe PAGO')">YA PAGUÉ</button>
-        <hr>
-        <p>Live en Render ✅</p>
-      </body>
-    </html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lucía - Ramón Delgado</title>
+  <style>
+    body {font-family: Arial, sans-serif; background: linear-gradient(to bottom, #a0d8ef, #e0f6ff); margin:0; padding:20px; text-align:center;}
+    h1 {color: #005a87;}
+    h3 {color: #00334e;}
+    .btn {display:block; width:85%; max-width:400px; margin:18px auto; padding:20px; background:#00897b; color:white; text-decoration:none; border-radius:12px; font-size:20px; font-weight:bold; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+    .demo {background:#00bfa5;}
+  </style>
+</head>
+<body>
+  <h1>Hola, soy Lucía</h1>
+  <h3>Asistente virtual de Ramón Delgado</h3>
+  <h3>¿Qué te interesa?</h3>
+
+  <a href="https://wa.me/${phone}?text=Taller%20Primeros%20Auxilios" class="btn">Taller Primeros Auxilios</a>
+  <a href="https://wa.me/${phone}?text=Libros" class="btn">Libros</a>
+  <a href="https://wa.me/${phone}?text=Ya%20hice%20el%20pago" class="btn">Ya hice el pago</a>
+  class="btn">Hablar con Ramón Delgado</a>
+  <a href="https://wa.me/${phone}?text=demo" class="btn demo">DEMO</a>
+
+  <p><small>Live en Render ✅</small></p>
+</body>
+</html>
   `);
 });
 
@@ -77,7 +79,4 @@ app.get('/', (req, res) => {
 client.initialize();
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-  console.log(`Enlace: https://lucia-bot.onrender.com`);
-});
+app.listen(PORT, () => console.log(`Bot corriendo → https://lucia-bot.onrender.com`));
