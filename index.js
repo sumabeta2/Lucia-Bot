@@ -23,7 +23,7 @@ client.on('ready', () => {
 
 // ==================== MODO DEMO SECRETO ====================
 const MI_NUMERO = '51999123456@c.us';   // ← TU número con @c.us
-const CODIGO_DEMO = '123456';           // ← Cambia cuando quieras
+const CODIGO_DEMO = '561393';           // ← Cambia cuando quieras
 
 client.on('message', async msg => {
   const from = msg.from;
