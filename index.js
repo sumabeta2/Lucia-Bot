@@ -11,36 +11,38 @@ const client = new Client({
   puppeteer: { headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] }
 });
 
-// ==================== QR Y ESTADO ====================
+// QR Y ESTADO
 client.on('qr', qr => {
   console.log('Escanea este QR:');
   qrcode.generate(qr, { small: true });
 });
 
 client.on('ready', () => {
-  console.log('¡Lucía Bot conectado y listo!');
+  console.log('Lucia Bot conectado y listo!');
 });
 
-// ==================== BOTÓN DEMO SECRETO ====================
-const MI_NUMERO = '51999123456@c.us';   // ← TU NÚMERO CON @c.us
-const CODIGO_DEMO = '561393';           // ← cambia si quieres otro código
+// BOTON DEMO SECRETO
+const MI_NUMERO = '51999123456@c.us';   // Cambia por tu numero con @c.us
+const CODIGO_DEMO = '561393';           // Cambia si quieres otro codigo
 
 client.on('message', async msg => {
   const from = msg.from;
-  const texto = msg.body.trim();
+  const texto = msg.body.trim().toLowerCase();
 
-  if (texto.toLowerCase() === 'demo' && from === MI_NUMERO) {
-    return msg.reply('Ingresa el código de acceso:');
+  if (texto === 'demo' && from === MI_NUMERO) {
+    return msg.reply('Ingresa el codigo de acceso:');
   }
   if (texto === CODIGO_DEMO && from === MI_NUMERO) {
-    return msg.reply('✅ *MODO DEMO ACTIVADO*\n\nAhora puedes probar el flujo de citas médicas.\nEscribe *cita* para empezar la demo.');
+    return msg.reply('MODO DEMO ACTIVADO\n\nEscribe *cita* para probar el flujo de citas medicas.');
   }
 
-  // Tus respuestas normales (puedes ir ampliándolas después)
-  if (texto.toLowerCase() === 'hola' || texto === '') && msg.reply('¡Hola! Soy Lucía, asistente virtual de Ramón Delgado.');
+  // Respuestas normales
+  if (texto === 'hola' || texto === '') {
+    msg.reply('Hola! Soy Lucia, asistente virtual de Ramon Delgado.');
+  }
 });
 
-// ==================== PÁGINA EXACTAMENTE COMO TÚ QUIERES ====================
+// PAGINA CON 5 BOTONES EXACTAMENTE COMO QUIERES
 app.get('/', (req, res) => {
   const phone = process.env.PHONE_NUMBER || '51999123456';
   res.send(`
@@ -49,7 +51,7 @@ app.get('/', (req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lucía - Ramón Delgado</title>
+  <title>Lucia - Ramon Delgado</title>
   <style>
     body {font-family: Arial, sans-serif; background: linear-gradient(to bottom, #a0d8ef, #e0f6ff); margin:0; padding:20px; text-align:center;}
     h1 {color: #005a87;}
@@ -59,24 +61,24 @@ app.get('/', (req, res) => {
   </style>
 </head>
 <body>
-  <h1>Hola, soy Lucía</h1>
-  <h3>Asistente virtual de Ramón Delgado</h3>
-  <h3>¿Qué te interesa?</h3>
+  <h1>Hola, soy Lucia</h1>
+  <h3>Asistente virtual de Ramon Delgado</h3>
+  <h3>¿Que te interesa?</h3>
 
   <a href="https://wa.me/${phone}?text=Taller%20Primeros%20Auxilios" class="btn">Taller Primeros Auxilios</a>
   <a href="https://wa.me/${phone}?text=Libros" class="btn">Libros</a>
   <a href="https://wa.me/${phone}?text=Ya%20hice%20el%20pago" class="btn">Ya hice el pago</a>
-  class="btn">Hablar con Ramón Delgado</a>
+  <a href="https://wa.me/${phone}?text=Hablar%20con%20Ramon%20Delgado" class="btn">Hablar con Ramon Delgado</a>
   <a href="https://wa.me/${phone}?text=demo" class="btn demo">DEMO</a>
 
-  <p><small>Live en Render ✅</small></p>
+  <p><small>Live en Render</small></p>
 </body>
 </html>
   `);
 });
 
-// ==================== INICIAR ====================
+// INICIAR
 client.initialize();
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Bot corriendo → https://lucia-bot.onrender.com`));
+app.listen(PORT, () => console.log('Bot corriendo en puerto ' + PORT));
