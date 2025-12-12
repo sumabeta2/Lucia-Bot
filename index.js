@@ -1,24 +1,48 @@
-// ——————— BOTÓN DEMO OCULTO (solo tú puedes usarlo) ———————
-const TU_NUMERO_SECRETO = '51931479063@c.us'; // ← pon aquí tu número real con @c.us
-const CODIGO_DEMO = '561393';                    // ← cambia este código a lo que quieras
+require('dotenv').config();
+const express = require('express');
+const { Client, LocalAuth } = require('whatsapp-web.js');
+const qrcode = require('qrcode-terminal');
 
-let modoDemo = false;
+const app = express();
+app.use(express.json());
+
+const client = new Client({
+  authStrategy: new LocalAuth(),
+  puppeteer: { headless: true, args: ['--no-sandbox'] }
+});
+
+client.on('qr', qr => {
+  qrcode.generate(qr, { small: true });
+  console.log('Escanea este QR con tu celular');
+});
+
+client.on('ready', () => {
+  console.log('¡Bot conectado y listo!');
+});
 
 client.on('message', async msg => {
+  const texto = msg.body.toLowerCase().trim();
   const from = msg.from;
-  const texto = msg.body.trim();
 
-  // Si escribes "demo" desde tu número secreto
-  if (texto.toLowerCase() === 'demo' && from === TU_NUMERO_SECRETO) {
-    modoDemo = true;
-    return msg.reply('Ingresa el código de acceso de 6 dígitos:');
+  // ←←← TU NÚMERO SECRETO (cambia esto)
+  const MI_NUMERO = '51931479063@c.us'; // ← tu número real con @c.us
+  const CODIGO = '561393'; // ← cambia el código si quieres
+
+  if (texto === 'demo' && from === MI_NUMERO) {
+    return msg.reply('Ingresa el código de 6 dígitos:');
   }
 
-  // Si escribes el código correcto
-  if (modoDemo && texto === CODIGO_DEMO && from === TU_NUMERO_SECRETO) {
-    modoDemo = false;
-    return msg.reply('✅ *MODO DEMO ACTIVADO*\n\nAhora puedes probar el flujo de citas médicas completo.\n\nEscribe *cita* para comenzar la demostración.');
+  if (texto === CODIGO && from === MI_NUMERO) {
+    return msg.reply('✅ *MODO DEMO ACTIVADO*\n\nEscribe *cita* para probar el flujo de citas médicas.');
   }
 
-  // Aquí puedes seguir añadiendo después el flujo completo de citas cuando quieras
+  // Aquí irán más adelante los flujos normales (talleres, libros, etc.)
+  if (texto === 'hola') {
+    msg.reply('¡Hola! Soy Lucía, tu asistente. Pronto tendrás los botones.');
+  }
 });
+
+client.initialize();
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
