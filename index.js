@@ -116,7 +116,7 @@ client.on('message', async msg => {
     msg.reply('¡Hola! Soy Lucía. Los flujos están en construcción. Pronto estarán listos.');
 });
 
-// ==================== PÁGINA CON BOTÓN TALLER CORREGIDO ====================
+// ==================== PÁGINA PRINCIPAL CON BOTÓN TALLER (INTACTA) ====================
 app.get('/', (req, res) => {
   res.send(`
 <!DOCTYPE html>
@@ -166,6 +166,92 @@ app.get('/', (req, res) => {
 </body>
 </html>
   `);
+});
+
+// ==================== NUEVA RUTA /PRUEBA PARA SIMULAR EL FLUJO (SIMPLE CHAT) ====================
+app.get('/prueba', (req, res) => {
+    // Simular el inicio del flujo (como si hubieras dicho "taller")
+    const messages = [
+        '<div style="background:#e1f5fe;padding:10px;margin:10px;border-radius:8px;text-align:left;max-width:80%;margin-left:auto;"><strong>Bot:</strong> Muy bien de acuerdo, para continuar, por favor indícame ¿en qué país te encuentras?<br>Responde con uno de estos:<br>• Perú<br>• México<br>• Colombia<br>• Venezuela<br>• Otros</div>'
+    ];
+
+    res.send(`
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prueba Flujo Taller - Lucía</title>
+  <style>
+    body {font-family:Arial;background:linear-gradient(#a0d8ef,#e0f6ff);margin:0;padding:20px;text-align:center;}
+    #chat {height:400px;overflow-y:scroll;border:1px solid #ccc;padding:10px;background:white;margin:20px auto;width:90%;border-radius:12px;}
+    input {width:70%;padding:10px;font-size:16px;border:1px solid #ccc;border-radius:8px;}
+    button {padding:10px 20px;font-size:16px;background:#00897b;color:white;border:none;border-radius:8px;cursor:pointer;}
+    .user-msg {background:#c8e6c9;padding:8px;margin:5px;border-radius:8px;text-align:right;max-width:80%;margin-right:auto;display:inline-block;}
+    .bot-msg {background:#e1f5fe;padding:8px;margin:5px;border-radius:8px;text-align:left;max-width:80%;margin-left:auto;display:inline-block;}
+  </style>
+</head>
+<body>
+  <h2>Prueba del Flujo Taller (escribe como usuario)</h2>
+  <div id="chat">${messages.join('')}</div>
+  <input type="text" id="input" placeholder="Escribe tu respuesta (ej: México)" onkeypress="if(event.key==='Enter') sendMessage()">
+  <button onclick="sendMessage()">Enviar</button>
+  <script>
+    let flowStep = 'pais'; // Simula el estado del flujo
+    let flowData = {};
+    
+    function sendMessage() {
+      const input = document.getElementById('input');
+      const userText = input.value.trim().toLowerCase();
+      if (!userText) return;
+      
+      // Agregar mensaje del usuario
+      const chat = document.getElementById('chat');
+      chat.innerHTML += '<div class="user-msg"><strong>Tú:</strong> ' + input.value + '</div>';
+      input.value = '';
+      
+      // Simular respuesta del bot basada en el flujo EXACTO
+      let botReply = '';
+      if (flowStep === 'pais') {
+        if (userText.includes('méxico') || userText.includes('mexico')) {
+          flowStep = 'interes';
+          botReply = 'Muy bien le explicó, el taller será en vivo, a través de la plataforma Google Meet, al inscribirse, tendrá, los siguientes beneficios:<br>Certificado de participación (constancia) con validez internacional, tendrá material de apoyo en PDF y acceso a la clase grabada de por vida.<br><br>Todos estos beneficios, por una inversión de $249 pesos mexicanos.<br><br>Tan solo dígame, ¿Le interesa?<br><br>Responde *SÍ* o *NO*';
+        } else {
+          botReply = 'Gracias por su interés, estamos a su orden si cambia de opinión.';
+          flowStep = null;
+        }
+      } else if (flowStep === 'interes') {
+        if (userText.includes('sí') || userText.includes('si')) {
+          flowStep = 'metodo_pago';
+          botReply = 'Muy bien en México tenemos dos métodos de pago, ¿cuál prefiere?<br><br>Responde con:<br>• OXXO<br>• TRANSFERENCIA';
+        } else if (userText.includes('no')) {
+          botReply = 'Gracias por su interés, estamos a su orden si cambia de opinión.';
+          flowStep = null;
+        } else {
+          botReply = 'Por favor responde *SÍ* o *NO* para continuar.';
+        }
+      } else if (flowStep === 'metodo_pago') {
+        if (userText.includes('oxxo')) {
+          botReply = '*OXXO, por favor:*<br>4741742975530315<br>Luis Ibarra <br>Banregio<br>Monto: $249 pesos mexicanos<br><br>**Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.**<br>**Nota2: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.**';
+          flowStep = null;
+        } else if (userText.includes('transferencia')) {
+          botReply = '*Solo Transferencia bancaria*:<br>721180100038218691<br>Jhonatan Hernández <br>Banco albo<br>Monto: $249 pesos mexicanos<br><br>**Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.**<br>**Nota2: En la transacción, debe verse la clave de rastreo (OBLIGATORIO)**<br>**Nota3: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.**';
+          flowStep = null;
+        }
+      } else {
+        botReply = '¡Hola! Soy Lucía. Los flujos están en construcción. Pronto estarán listos.';
+      }
+      
+      // Agregar respuesta del bot
+      setTimeout(() => {
+        chat.innerHTML += '<div class="bot-msg"><strong>Bot:</strong> ' + botReply + '</div>';
+        chat.scrollTop = chat.scrollHeight;
+      }, 500); // Simula delay de respuesta
+    }
+  </script>
+</body>
+</html>
+    `);
 });
 
 client.initialize();
