@@ -119,7 +119,7 @@ Monto: $249 pesos mexicanos
     await msg.reply('¡Hola! Soy Lucía. Los flujos están en construcción. Pronto estarán listos.');
 });
 
-// ==================== PÁGINA PRINCIPAL CON SIMULADOR ====================
+// ==================== PÁGINA PRINCIPAL CON SIMULADOR Y BOTÓN NARANJA ====================
 app.get('/', (req, res) => {
     res.send(`
 <!DOCTYPE html>
@@ -279,4 +279,6 @@ app.get('/', (req, res) => {
 client.initialize();
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(Bot corriendo en puerto ${PORT}));
+app.listen(PORT, () => {
+    console.log(Bot corriendo en puerto ${PORT});
+});
