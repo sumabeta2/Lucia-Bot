@@ -1,5 +1,5 @@
 require('dotenv').config();
-const express = require('express');
+const express = require('express';
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
@@ -38,7 +38,7 @@ client.on('message', async msg => {
         return msg.reply('Ingresa el código de 6 dígitos:');
     }
     if (texto === CODIGO_DEMO && from === MI_NUMERO) {
-        return msg.reply('✅ MODO DEMO ACTIVADO\n\nEscribe *cita* para probar el flujo de citas médicas.');
+        return msg.reply('✅ MODO DEMO ACTIVADO\n\nEscribe cita para probar el flujo de citas médicas.');
     }
 
     // ==================== FLUJO TALLER REAL (para WhatsApp) ====================
@@ -57,10 +57,10 @@ client.on('message', async msg => {
         if (textoLower.includes('méxico') || textoLower.includes('mexico')) {
             flow.step = 'interes';
             await msg.reply(
-`Muy bien le explicó, el taller será en vivo, a través de la plataforma Google Meet, al inscribirse, tendrá, los siguientes beneficios:\n` +
-`Certificado de participación (constancia) con validez internacional, tendrá material de apoyo en PDF y acceso a la clase grabada de por vida.\n\n` +
-`Todos estos beneficios, por una inversión de $249 pesos mexicanos.\n\n` +
-`Tan solo dígame, ¿Le interesa?\n\nResponde *SÍ* o *NO*`
+Muy bien le explicó, el taller será en vivo, a través de la plataforma Google Meet, al inscribirse, tendrá, los siguientes beneficios:\n +
+Certificado de participación (constancia) con validez internacional, tendrá material de apoyo en PDF y acceso a la clase grabada de por vida.\n\n +
+Todos estos beneficios, por una inversión de $249 pesos mexicanos.\n\n +
+Tan solo dígame, ¿Le interesa?\n\nResponde *SÍ* o *NO*
             );
         } else {
             await msg.reply('Gracias por su interés, estamos a su orden si cambia de opinión.');
@@ -73,8 +73,8 @@ client.on('message', async msg => {
         if (textoLower.includes('sí') || textoLower.includes('si')) {
             flow.step = 'metodo_pago';
             await msg.reply(
-`Muy bien en México tenemos dos métodos de pago, ¿cuál prefiere?\n\n` +
-`Responde con:\n• OXXO\n• TRANSFERENCIA`
+Muy bien en México tenemos dos métodos de pago, ¿cuál prefiere?\n\n +
+Responde con:\n• OXXO\n• TRANSFERENCIA
             );
         } else if (textoLower.includes('no')) {
             await msg.reply('Gracias por su interés, estamos a su orden si cambia de opinión.');
@@ -86,25 +86,25 @@ client.on('message', async msg => {
     if (flow.step === 'metodo_pago') {
         if (textoLower.includes('oxxo')) {
             await msg.reply(
-`*OXXO, por favor:*\n` +
-`4741742975530315\n` +
-`Luis Ibarra \n` +
-`Banregio\n` +
-`Monto: $249 pesos mexicanos\n\n` +
-`**Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.**\n` +
-`**Nota2: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.**`
+*OXXO, por favor:*\n +
+4741742975530315\n +
+Luis Ibarra \n +
+Banregio\n +
+Monto: $249 pesos mexicanos\n\n +
+**Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.**\n +
+**Nota2: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.**
             );
             delete userFlows[from];
         } else if (textoLower.includes('transferencia')) {
             await msg.reply(
-`*Solo Transferencia bancaria*:\n` +
-`721180100038218691\n` +
-`Jhonatan Hernández \n` +
-`Banco albo\n` +
-`Monto: $249 pesos mexicanos\n\n` +
-`**Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.**\n` +
-`**Nota2: En la transacción, debe verse la clave de rastreo (OBLIGATORIO)**\n` +
-`**Nota3: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.**`
+*Solo Transferencia bancaria*:\n +
+721180100038218691\n +
+Jhonatan Hernández \n +
+Banco albo\n +
+Monto: $249 pesos mexicanos\n\n +
+**Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.**\n +
+**Nota2: En la transacción, debe verse la clave de rastreo (OBLIGATORIO)**\n +
+**Nota3: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.**
             );
             delete userFlows[from];
         }
@@ -115,7 +115,7 @@ client.on('message', async msg => {
     msg.reply('¡Hola! Soy Lucía. Los flujos están en construcción. Pronto estarán listos.');
 });
 
-// ==================== PÁGINA PRINCIPAL CON BOTÓN DE PRUEBA ====================
+// ==================== PÁGINA PRINCIPAL CON SIMULADOR DE PRUEBA ====================
 app.get('/', (req, res) => {
   res.send(`
 <!DOCTYPE html>
@@ -134,7 +134,7 @@ app.get('/', (req, res) => {
     #demo-box {display:none;margin:30px auto;width:85%;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 15px #0003;}
     input {width:100%;padding:15px;font-size:18px;border:1px solid #ccc;border-radius:8px;margin:10px 0;}
     #flow-container {display:none;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 15px #0003;margin:20px auto;width:90%;max-width:500px;}
-    .message {background:#e1f5fe;padding:15px;margin:15px 0;border-radius:12px;text-align:left;}
+    .message {background:#e1f5fe;padding:15px;margin:15px 0;border-radius:12px;text-align:left;line-height:1.5;}
     .buttons {display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px;}
     .option-btn {padding:15px 20px;background:#00897b;color:white;border:none;border-radius:12px;font-size:18px;cursor:pointer;flex:1 1 40%;}
   </style>
@@ -179,10 +179,13 @@ app.get('/', (req, res) => {
     function startTest() {
       document.getElementById('flow-container').style.display = 'block';
       document.getElementById('flow-messages').innerHTML = '<div class="message">Muy bien de acuerdo, para continuar, por favor indícame ¿en qué país te encuentras?</div>';
-      const buttons = ['Perú', 'México', 'Colombia', 'Venezuela', 'Otros'];
+      showCountryButtons();
+    }
+
+    function showCountryButtons() {
       const btnContainer = document.getElementById('flow-buttons');
       btnContainer.innerHTML = '';
-      buttons.forEach(country => {
+      ['Perú', 'México', 'Colombia', 'Venezuela', 'Otros'].forEach(country => {
         const btn = document.createElement('button');
         btn.className = 'option-btn';
         btn.textContent = country;
@@ -193,11 +196,15 @@ app.get('/', (req, res) => {
 
     function selectCountry(country) {
       if (country !== 'México') {
-        document.getElementById('flow-messages').innerHTML += '<div class="message">Gracias por su interés, estamos a su orden si cambia de opinión.</div>';
-        document.getElementById('flow-buttons').innerHTML = '';
+        addMessage('Gracias por su interés, estamos a su orden si cambia de opinión.');
+        clearButtons();
         return;
       }
-      document.getElementById('flow-messages').innerHTML += '<div class="message">Muy bien le explicó, el taller será en vivo, a través de la plataforma Google Meet, al inscribirse, tendrá, los siguientes beneficios:<br><br>Certificado de participación (constancia) con validez internacional, tendrá material de apoyo en PDF y acceso a la clase grabada de por vida.<br><br>Todos estos beneficios, por una inversión de $249 pesos mexicanos.<br><br>Tan solo dígame, ¿Le interesa?<br><br></div>';
+      addMessage('Muy bien le explicó, el taller será en vivo, a través de la plataforma Google Meet, al inscribirse, tendrá, los siguientes beneficios:<br><br>Certificado de participación (constancia) con validez internacional, tendrá material de apoyo en PDF y acceso a la clase grabada de por vida.<br><br>Todos estos beneficios, por una inversión de $249 pesos mexicanos.<br><br>Tan solo dígame, ¿Le interesa?');
+      showYesNoButtons();
+    }
+
+    function showYesNoButtons() {
       const btnContainer = document.getElementById('flow-buttons');
       btnContainer.innerHTML = '';
       ['SÍ', 'NO'].forEach(opt => {
@@ -211,11 +218,15 @@ app.get('/', (req, res) => {
 
     function selectInterest(opt) {
       if (opt === 'NO') {
-        document.getElementById('flow-messages').innerHTML += '<div class="message">Gracias por su interés, estamos a su orden si cambia de opinión.</div>';
-        document.getElementById('flow-buttons').innerHTML = '';
+        addMessage('Gracias por su interés, estamos a su orden si cambia de opinión.');
+        clearButtons();
         return;
       }
-      document.getElementById('flow-messages').innerHTML += '<div class="message">Muy bien en México tenemos dos métodos de pago, ¿cuál prefiere?</div>';
+      addMessage('Muy bien en México tenemos dos métodos de pago, ¿cuál prefiere?');
+      showPaymentButtons();
+    }
+
+    function showPaymentButtons() {
       const btnContainer = document.getElementById('flow-buttons');
       btnContainer.innerHTML = '';
       ['OXXO', 'TRANSFERENCIA'].forEach(method => {
@@ -230,20 +241,4 @@ app.get('/', (req, res) => {
     function selectMethod(method) {
       let reply = '';
       if (method === 'OXXO') {
-        reply = `*OXXO, por favor:*<br>4741742975530315<br>Luis Ibarra <br>Banregio<br>Monto: $249 pesos mexicanos<br><br>**Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.**<br>**Nota2: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.**`;
-      } else {
-        reply = `*Solo Transferencia bancaria*:<br>721180100038218691<br>Jhonatan Hernández <br>Banco albo<br>Monto: $249 pesos mexicanos<br><br>**Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.**<br>**Nota2: En la transacción, debe verse la clave de rastreo (OBLIGATORIO)**<br>**Nota3: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.**`;
-      }
-      document.getElementById('flow-messages').innerHTML += '<div class="message">' + reply + '</div>';
-      document.getElementById('flow-buttons').innerHTML = '';
-    }
-  </script>
-</body>
-</html>
-  `);
-});
-
-client.initialize();
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('Bot corriendo'));
+        reply = 'OXXO, por favor:<br>4741742975530315<br>Luis Ibarra <br>Banregio<br
