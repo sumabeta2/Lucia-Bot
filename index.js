@@ -1,5 +1,5 @@
 require('dotenv').config();
-const express = require('express';
+const express = require('express');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
@@ -135,6 +135,7 @@ app.get('/', (req, res) => {
     input {width:100%;padding:15px;font-size:18px;border:1px solid #ccc;border-radius:8px;margin:10px 0;}
     #flow-container {display:none;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 15px #0003;margin:20px auto;width:90%;max-width:500px;}
     .message {background:#e1f5fe;padding:15px;margin:15px 0;border-radius:12px;text-align:left;line-height:1.5;}
+    .message strong {font-weight:bold;}
     .buttons {display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px;}
     .option-btn {padding:15px 20px;background:#00897b;color:white;border:none;border-radius:12px;font-size:18px;cursor:pointer;flex:1 1 40%;}
   </style>
@@ -178,7 +179,7 @@ app.get('/', (req, res) => {
 
     function startTest() {
       document.getElementById('flow-container').style.display = 'block';
-      document.getElementById('flow-messages').innerHTML = '<div class="message">Muy bien de acuerdo, para continuar, por favor indícame ¿en qué país te encuentras?</div>';
+      addMessage('Muy bien de acuerdo, para continuar, por favor indícame ¿en qué país te encuentras?');
       showCountryButtons();
     }
 
@@ -241,4 +242,29 @@ app.get('/', (req, res) => {
     function selectMethod(method) {
       let reply = '';
       if (method === 'OXXO') {
-        reply = 'OXXO, por favor:<br>4741742975530315<br>Luis Ibarra <br>Banregio<br
+        reply = '<strong>OXXO, por favor:</strong><br>4741742975530315<br>Luis Ibarra <br>Banregio<br>Monto: $249 pesos mexicanos<br><br><strong>Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.</strong><br><strong>Nota2: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.</strong>';
+      } else {
+        reply = '<strong>Solo Transferencia bancaria:</strong><br>721180100038218691<br>Jhonatan Hernández <br>Banco albo<br>Monto: $249 pesos mexicanos<br><br><strong>Nota1, por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.</strong><br><strong>Nota2: En la transacción, debe verse la clave de rastreo (OBLIGATORIO)</strong><br><strong>Nota3: Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para regidirlo a una persona, que le tomara su caso, para finalizar su inscripción.</strong>';
+      }
+      addMessage(reply);
+      clearButtons();
+    }
+
+    function addMessage(text) {
+      document.getElementById('flow-messages').innerHTML += '<div class="message">' + text + '</div>';
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function clearButtons() {
+      document.getElementById('flow-buttons').innerHTML = '';
+    }
+  </script>
+</body>
+</html>
+  `);
+});
+
+client.initialize();
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('Bot corriendo'));
