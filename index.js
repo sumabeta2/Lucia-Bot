@@ -67,7 +67,7 @@ Todos estos beneficios por una inversión de $249 pesos mexicanos.
 
 Tan solo dígame, ¿Le interesa?
 
-Responde SÍ o *NO*`);
+Responde *SÍ* o *NO*`);
         } else {
             await msg.reply('Gracias por su interés, estamos a su orden si cambia de opinión.');
             delete userFlows[from];
@@ -94,9 +94,9 @@ Luis Ibarra
 Banregio
 Monto: $249 pesos mexicanos
 
-*Nota1:* Por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.
+**Nota1:** Por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.
 
-*Nota2:* Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para registrarlo a una persona que le tomará su caso y finalizará su inscripción.`);
+**Nota2:** Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para registrarlo a una persona que le tomará su caso y finalizará su inscripción.`);
             delete userFlows[from];
         } else if (textoLower.includes('transferencia')) {
             await msg.reply(`*Solo Transferencia bancaria:*
@@ -105,11 +105,11 @@ Jhonatan Hernández
 Banco albo
 Monto: $249 pesos mexicanos
 
-*Nota1:* Por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.
+**Nota1:** Por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.
 
-*Nota2:* En la transacción, debe verse la clave de rastreo (OBLIGATORIO)
+**Nota2:** En la transacción, debe verse la clave de rastreo (OBLIGATORIO)
 
-*Nota3:* Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para registrarlo a una persona que le tomará su caso y finalizará su inscripción.`);
+**Nota3:** Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para registrarlo a una persona que le tomará su caso y finalizará su inscripción.`);
             delete userFlows[from];
         }
         return;
@@ -208,7 +208,7 @@ app.get('/', (req, res) => {
                 clearButtons();
                 return;
             }
-            addMessage(Muy bien, le explico: el taller será en vivo, a través de la plataforma Google Meet. Al inscribirse, tendrá los siguientes beneficios:<br><br>• Certificado de participación (constancia) con validez internacional<br>• Material de apoyo en PDF<br>• Acceso a la clase grabada de por vida<br><br>Todos estos beneficios por una inversión de $249 pesos mexicanos.<br><br>Tan solo dígame, ¿Le interesa?);
+            addMessage(`Muy bien, le explico: el taller será en vivo, a través de la plataforma Google Meet. Al inscribirse, tendrá los siguientes beneficios:<br><br>• Certificado de participación (constancia) con validez internacional<br>• Material de apoyo en PDF<br>• Acceso a la clase grabada de por vida<br><br>Todos estos beneficios por una inversión de $249 pesos mexicanos.<br><br>Tan solo dígame, ¿Le interesa?`);
             showYesNoButtons();
         }
 
@@ -251,9 +251,9 @@ app.get('/', (req, res) => {
             addMessage('<strong>Tú:</strong> ' + method);
             let reply = '';
             if (method === 'OXXO') {
-                reply = <strong>OXXO, por favor:</strong><br>4741742975530315<br>Luis Ibarra<br>Banregio<br>Monto: $249 pesos mexicanos<br><br><strong>Nota1:</strong> Por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.<br><strong>Nota2:</strong> Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para registrarlo a una persona que le tomará su caso y finalizará su inscripción.;
+                reply = `<strong>OXXO, por favor:</strong><br>4741742975530315<br>Luis Ibarra<br>Banregio<br>Monto: $249 pesos mexicanos<br><br><strong>Nota1:</strong> Por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción. Gracias.<br><strong>Nota2:</strong> Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para registrarlo a una persona que le tomará su caso y finalizará su inscripción.`;
             } else {
-                reply = <strong>Solo Transferencia bancaria:</strong><br>721180100038218691<br>Jhonatan Hernández<br>Banco albo<br>Monto: $249 pesos mexicanos<br><br><strong>Nota1:</strong> Por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.<br><strong>Nota2:</strong> En la transacción, debe verse la clave de rastreo (OBLIGATORIO)<br><strong>Nota3:</strong> Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para registrarlo a una persona que le tomará su caso y finalizará su inscripción.;
+                reply = `<strong>Solo Transferencia bancaria:</strong><br>721180100038218691<br>Jhonatan Hernández<br>Banco albo<br>Monto: $249 pesos mexicanos<br><br><strong>Nota1:</strong> Por favor hacer la operación antes de las 5:30pm, hora mexicana. Después de esa hora, no será reconocida la transacción.<br><strong>Nota2:</strong> En la transacción, debe verse la clave de rastreo (OBLIGATORIO)<br><strong>Nota3:</strong> Una vez que haga la transacción, debe ubicar en el menú principal el botón "Ya hice el pago" para registrarlo a una persona que le tomará su caso y finalizará su inscripción.`;
             }
             addMessage(reply);
             clearButtons();
@@ -280,5 +280,5 @@ client.initialize();
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(Bot corriendo en puerto ${PORT});
+    console.log(`Bot corriendo en puerto ${PORT}`);
 });
