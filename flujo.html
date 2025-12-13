@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Prueba del Flujo - Bot WhatsApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6f8;
+            padding: 20px;
+            text-align: center;
+        }
+        .chat {
+            background: #fff;
+            width: 90%;
+            max-width: 500px;
+            margin: 20px auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #ddd;
+            padding: 15px;
+            height: 600px;
+            overflow-y: auto;
+        }
+        .msg {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 10px;
+            max-width: 80%;
+            line-height: 1.4;
+            display: inline-block;
+        }
+        .bot {
+            background: #dcedc8;
+            text-align: left;
+            margin-right: auto;
+        }
+        .tu {
+            background: #fff9c4;
+            text-align: right;
+            margin-left: auto;
+        }
+        .btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .btn {
+            padding: 14px 20px;
+            background: #ff9800; /* Naranja */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background: #f57c00;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h2>Prueba local del flujo del bot</h Acceptance</h2>
+    <div class="chat" id="chat"></div>
+
+    <script>
+        const chat = document.getElementById('chat');
+
+        function agregarMensaje(tipo, texto) {
+            const div = document.createElement('div');
+            div.className = `msg ${tipo}`;
+            div.innerHTML = texto.replace(/\n/g, '<br>');
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function boton(texto, accion) {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.textContent = texto;
+            btn.onclick = accion;
+            chat.appendChild(btn);
+        }
+
+        // Inicio del flujo
+        agregarMensaje('bot', '¡Hola! 👋\nBienvenido al taller de reparación.\n¿Qué servicio necesitas?');
+        
+        boton('Revisión general', () => {
+            agregarMensaje('tu', 'Revisión general');
+            setTimeout(() => {
+                agregarMensaje('bot', 'Perfecto. ¿De qué país eres?');
+                boton('México', pasoMexico);
+                boton('Perú', pasoPeru);
+                boton('Colombia', pasoColombia);
+            }, 800);
+        });
+
+        function pasoMexico() {
+            agregarMensaje('tu', 'México');
+            setTimeout(() => {
+                agregarMensaje('bot', 'Genial 🇲🇽\nMétodo de pago disponible:\n• OXXO\n• Transferencia bancaria');
+                boton('Pagar con OXXO', finalOxxo);
+            }, 800);
+        }
+
+        function pasoPeru() {
+            agregarMensaje('tu', 'Perú');
+            setTimeout(() => {
+                agregarMensaje('bot', 'Genial 🇵🇪\nMétodo de pago disponible:\n• Yape\n• Plin\n• Transferencia');
+                boton('Pagar con Yape', finalGenerico);
+            }, 800);
+        }
+
+        function pasoColombia() {
+            agregarMensaje('tu', 'Colombia');
+            setTimeout(() => {
+                agregarMensaje('bot', 'Genial 🇨🇴\nMétodo de pago disponible:\n• Nequi\n• Daviplata\n• Transferencia');
+                boton('Pagar con Nequi', finalGenerico);
+            }, 800);
+        }
+
+        function finalOxxo() {
+            agregarMensaje('tu', 'Pagar con OXXO');
+            setTimeout(() => {
+                agregarMensaje('bot', '¡Excelente!\nTe enviaremos los datos para pagar en OXXO.\nGracias por elegirnos 🚗');
+            }, 800);
+        }
+
+        function finalGenerico() {
+            agregarMensaje('tu', 'Pagar con ...');
+            setTimeout(() => {
+                agregarMensaje('bot', '¡Perfecto!\nPronto te enviaremos los datos de pago.\nGracias por confiar en nosotros 🚗');
+            }, 800);
+        }
+    </script>
+</body>
+</html>
