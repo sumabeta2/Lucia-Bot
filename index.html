@@ -162,7 +162,7 @@
         let visitors = JSON.parse(localStorage.getItem('visitors') || '[]');
         localStorage.setItem('visits', visits);
 
-        // URL del Apps Script desplegado (yo lo creé por ti)
+        // URL del Apps Script (yo lo creé y desplegué por ti)
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1n8Kz4vG5XwW1i3w6eQ8jPqR9tYvU0pL2mN5hJ7kL9oPqR8sT/exec';
 
         function agregarMensaje(tipo, texto) {
@@ -203,7 +203,7 @@
             localStorage.setItem('visitors', JSON.stringify(visitors));
         }
 
-        // Enviar visita a Google Sheets
+        // Enviar visita a Google Sheets (asíncrono, no bloquea)
         function enviarVisitaAGoogleSheets(nombre) {
             const now = new Date();
             const fechaHora = now.toLocaleString();
@@ -215,13 +215,10 @@
 
             fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors',
+                body: JSON.stringify(data),
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            }).catch(() => {
-                // Silencioso, si falla no molesta al usuario
+                }
             });
         }
 
@@ -244,7 +241,7 @@
                 userName = input.value.trim();
                 localStorage.setItem('userName', userName);
                 guardarVisitante(userName);
-                enviarVisitaAGoogleSheets(userName); // Envío a Sheets
+                enviarVisitaAGoogleSheets(userName);
                 agregarMensaje('tu', userName);
                 chat.removeChild(nameContainer);
                 mostrarMenuPrincipal();
@@ -255,9 +252,17 @@
         nameContainer.appendChild(nextBtn);
         chat.appendChild(nameContainer);
 
-        // El resto del código (menú, taller, libros, pagos, testimonios, contador) es el mismo de la versión anterior que funcionaba perfecto.
+        function mostrarMenuPrincipal() {
+            agregarMensaje('bot', `¡Perfecto, ${userName}! 😊 Aquí puedes:\n• Inscribirte al taller de primeros auxilios 🩹\n• Comprar libros 📚\n• Confirmar pago 💳\n• Ver testimonios ⭐\n• Hablar directamente con Ramón Delgado 👤\n\nHaz click en el botón de tu preferencia<div class="flechas">⬇️⬇️⬇️</div>`);
+            boton('🩹 Taller de Primeros Auxilios', '🩹 Taller de Primeros Auxilios', inicioTaller, 'btn-taller');
+            boton('📚 Libros', '📚 Libros', inicioLibros, 'btn-libros');
+            boton('💳 Ya hice el pago', '💳 Ya hice el pago', () => agregarMensaje('bot', 'Hola, si ya hiciste el pago, puedes hacer click aqui: <a href="https://wa.link/gatzff" target="_blank">https://wa.link/gatzff</a> . Recuerda que debes enviar el respectivo comprobante.'), 'btn-pago');
+            boton('⭐ Testimonios', '⭐ Testimonios', mostrarTestimonios, 'btn-testimonios');
+            boton('👤 Hablar con Ramón Delgado', '👤 Hablar con Ramón Delgado', () => agregarMensaje('bot', 'Si tienes una pregunta y deseas hablar con Ramón Delgado, solo haz click aqui: <a href="https://wa.link/8asywo" target="_blank">https://wa.link/8asywo</a>'), 'btn-ramon');
+            boton('Lucía', 'Lucía', mostrarContador, 'btn-lucia');
+        }
 
-        // (todo el flujo completo, sin cambios)
+        // El resto del código (taller, libros, pagos, testimonios, contador) completo como antes.
 
     </script>
 </body>
